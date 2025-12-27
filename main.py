@@ -40,8 +40,8 @@ def calculate(data: TradeInput):
     lot = (risk_amount / loss_per_001)* 0.01
 
     # 實際盈虧
-    actual_loss = loss_per_001 * (lot / 0.01)
-    actual_profit = profit_per_001 * (lot / 0.01)
+    actual_loss = loss_per_001 * lot
+    actual_profit = profit_per_001 * lot
 
     # 止盈價
     if data.direction.lower().startswith("buy"):
