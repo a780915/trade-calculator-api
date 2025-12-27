@@ -23,14 +23,14 @@ class TradeInput(BaseModel):
     capital: float    # 本金
     risk_pct: float   # 風險比例（%）
     rr: float         # 盈虧比
-    entry: float      # 進場價
-    stop: float       # 止損價
+    entryPrice: float      # 進場價
+    stopPrice: float       # 止損價
 
 @app.post("/calculate")
 def calculate(data: TradeInput):
     # 基本計算
     risk_amount = data.capital * data.risk_pct / 100 # 單筆可承受虧損金額
-    price_diff = abs(data.entry - data.stop) # 進場與止損價差
+    price_diff = abs(data.entryPrice - data.stopPrice) # 進場與止損價差
 
     # 假設：0.01 手數 = 價差 * 1
     loss_per_001 = price_diff
@@ -46,14 +46,14 @@ def calculate(data: TradeInput):
 
     # 止盈價
     if data.direction.lower().startswith("buy"):
-        take_profit = data.entry + price_diff * data.rr
+        take_profit = data.entryPrice + price_diff * data.rr
     else:
-        take_profit = data.entry - price_diff * data.rr
+        take_profit = data.entryPrice - price_diff * data.rr
 
     return {
         "direction": data.direction,
-        "entry": data.entry,
-        "stop": data.stop,
+        "entryPrice": data.entryPrice,
+        "stopPrice": data.stopPrice,
         "take_profit": round(take_profit, 2),
         "loss_per_001": round(loss_per_001, 2),
         "profit_per_001": round(profit_per_001, 2),
