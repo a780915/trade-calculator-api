@@ -24,7 +24,7 @@ class TradeInput(BaseModel):
     risk_pct: float   # 風險比例（%）
     rr: float         # 盈虧比
     entryPrice: float      # 進場價
-    stopPrice: float       # 止損價
+    stopPrice: float       # 止損價 
 
 @app.post("/calculate")
 def calculate(data: TradeInput):
@@ -38,7 +38,7 @@ def calculate(data: TradeInput):
 
     # 建議手數（四捨五入到 0.01）
     lot = risk_amount / loss_per_001
-    lot = round(lot / 0.01) * 0.01
+    lot = round(lot * 0.01)
 
     # 實際盈虧
     actual_loss = loss_per_001 * (lot / 0.01)
