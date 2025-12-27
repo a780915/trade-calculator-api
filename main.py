@@ -25,6 +25,7 @@ class TradeInput(BaseModel):
     rr: float         # 盈虧比
     entryPrice: float      # 進場價
     stopPrice: float       # 止損價 
+    lot: float       # 手數
 
 @app.post("/calculate")
 def calculate(data: TradeInput):
