@@ -58,6 +58,6 @@ def calculate(data: TradeInput):
         "loss_per_001": round(loss_per_001, 2),
         "profit_per_001": round(profit_per_001, 2),
         "lot": round(lot, 2),
-        "actual_loss": round(actual_loss, 2),
-        "actual_profit": round(actual_profit, 2),
+        "actual_loss": actual_loss,
+        "actual_profit": actual_profit,
     }
