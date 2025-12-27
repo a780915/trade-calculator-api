@@ -26,8 +26,6 @@ class TradeInput(BaseModel):
     entryPrice: float      # 進場價
     stopPrice: float       # 止損價 
     lot: float       # 手數
-    actual_loss: float #實際虧損
-    actual_profit: float #實際獲利
 
 @app.post("/calculate")
 def calculate(data: TradeInput):
@@ -43,8 +41,8 @@ def calculate(data: TradeInput):
     lot = (risk_amount / loss_per_001)* 0.01
 
     # 實際盈虧
-    actual_loss = loss_per_001 * (lot / 0.01)
-    actual_profit = profit_per_001 * (lot / 0.01)
+    actual_loss = loss_per_001 * lot * 10
+    actual_profit = profit_per_001 * lot * 10
 
     # 止盈價
     if data.direction.lower().startswith("buy"):
@@ -60,6 +58,6 @@ def calculate(data: TradeInput):
         "loss_per_001": round(loss_per_001, 2),
         "profit_per_001": round(profit_per_001, 2),
         "lot": round(lot, 2),
-        "actual_loss": round(actual_loss,1),
-        "actual_profit": round(actual_profit,1),
+        "actual_loss": round(actual_loss, 1),
+        "actual_profit": round(actual_profit, 1),
     }
