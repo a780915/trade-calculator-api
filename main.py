@@ -37,8 +37,7 @@ def calculate(data: TradeInput):
     profit_per_001 = price_diff * data.rr
 
     # 建議手數（四捨五入到 0.01）
-    lot = risk_amount / loss_per_001
-    lot = round(lot * 0.01)
+    lot = (risk_amount / loss_per_001)* 0.01
 
     # 實際盈虧
     actual_loss = loss_per_001 * (lot / 0.01)
