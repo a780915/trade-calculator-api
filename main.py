@@ -1,30 +1,36 @@
+# FastAPI 主框架
 from fastapi import FastAPI
+
+# CORS 中介層（允許前端跨網域呼叫 API）
 from fastapi.middleware.cors import CORSMiddleware
+
+# 資料驗證用（確保前端送來的資料格式正確）
 from pydantic import BaseModel
+
 
 app = FastAPI()
 
 # CORS（GitHub Pages 必須）
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],      # 允許所有前端網域（GitHub Pages 必須）
+    allow_methods=["*"],      # 允許 POST / GET / OPTIONS
+    allow_headers=["*"],      # 允許 JSON header
 )
 
 class TradeInput(BaseModel):
-    direction: str
-    capital: float
-    risk_pct: float
-    rr: float
-    entry: float
-    stop: float
+    direction: str    # Buy / Sell / Buy Stop / Sell Stop
+    capital: float    # 本金
+    risk_pct: float   # 風險比例（%）
+    rr: float         # 盈虧比
+    entry: float      # 進場價
+    stop: float       # 止損價
 
 @app.post("/calculate")
 def calculate(data: TradeInput):
     # 基本計算
-    risk_amount = data.capital * data.risk_pct / 100
-    price_diff = abs(data.entry - data.stop)
+    risk_amount = data.capital * data.risk_pct / 100 # 單筆可承受虧損金額
+    price_diff = abs(data.entry - data.stop) # 進場與止損價差
 
     # 假設：0.01 手數 = 價差 * 1
     loss_per_001 = price_diff
@@ -34,6 +40,7 @@ def calculate(data: TradeInput):
     lot = risk_amount / loss_per_001
     lot = round(lot / 0.01) * 0.01
 
+    # 實際盈虧
     actual_loss = loss_per_001 * (lot / 0.01)
     actual_profit = profit_per_001 * (lot / 0.01)
 
